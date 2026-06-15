@@ -1,40 +1,45 @@
 package net.nico.fizzbuzz.controller;
 
-import java.util.StringJoiner;
+import java.util.Objects;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import net.nico.fizzbuzz.FizzBuzzService;
+
+@Validated
 @RestController
 @RequestMapping("/api")
 public class FizzBuzzController {
 
-	@GetMapping("/test")
-	public ResponseEntity<String> get(@RequestParam int int1, @RequestParam int int2, @RequestParam int limit,
-			@RequestParam String str1, @RequestParam String str2) {
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+
+	private final FizzBuzzService fizzBuzzService;
+
+	public FizzBuzzController(FizzBuzzService fizzBuzzService) {
+		this.fizzBuzzService = Objects.requireNonNull(fizzBuzzService);
+	}
+
+	@GetMapping("/fizzbuzz")
+	public ResponseEntity<String> get(
+			@RequestParam(defaultValue = "3") @Positive int int1,
+			@RequestParam(defaultValue = "5") @Positive int int2, 
+			@RequestParam(defaultValue = "100") @Positive int limit,
+			@RequestParam(defaultValue = "Fizz") @NotBlank String str1, 
+			@RequestParam(defaultValue = "Buzz") @NotBlank String str2) {
+		logger.debug("FizzBuzz request: int1={}, int2={}, limit={}, str1={}, str2={}", int1, int2, limit, str1, str2);
 		if (limit < 0) {
 			return ResponseEntity.badRequest().body("limit doit être strictement positif");
 		}
-		StringJoiner stringJoiner = new StringJoiner(",");
-		for (int i = 1; i < limit; i++) {
-			if (i % int1 == 0 || i % int2 == 0) {
-				StringBuilder stringBuilder = new StringBuilder(8);
-				if (i % int1 == 0) {
-					stringBuilder.append(str1);
-				}
-				if (i % int2 == 0) {
-					stringBuilder.append(str2);
-				}
-				stringJoiner.add(stringBuilder);
-			} else {
-				stringJoiner.add(String.valueOf(i));
-			}
-			
-		}
-		return ResponseEntity.ok(stringJoiner.toString());
+		return ResponseEntity.ok(fizzBuzzService.compute(int1, int2, limit, str1, str2));
 	}
 
 }
