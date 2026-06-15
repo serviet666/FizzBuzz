@@ -15,6 +15,9 @@ public class FizzBuzzController {
 	@GetMapping("/test")
 	public ResponseEntity<String> get(@RequestParam int int1, @RequestParam int int2, @RequestParam int limit,
 			@RequestParam String str1, @RequestParam String str2) {
+		if (limit < 0) {
+			return ResponseEntity.badRequest().body("limit doit être strictement positif");
+		}
 		StringJoiner stringJoiner = new StringJoiner(",");
 		for (int i = 1; i < limit; i++) {
 			if (i % int1 == 0 || i % int2 == 0) {
