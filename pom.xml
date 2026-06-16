@@ -12,9 +12,6 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.3.0</version>
 	</parent>
-	<properties>
-		<spring-boot-starter-validation.version>3.5.11</spring-boot-starter-validation.version>
-	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -36,9 +36,6 @@ public class FizzBuzzController {
 			@RequestParam(defaultValue = "Fizz") @NotBlank String str1, 
 			@RequestParam(defaultValue = "Buzz") @NotBlank String str2) {
 		logger.debug("FizzBuzz request: int1={}, int2={}, limit={}, str1={}, str2={}", int1, int2, limit, str1, str2);
-		if (limit < 0) {
-			return ResponseEntity.badRequest().body("limit doit être strictement positif");
-		}
 		return ResponseEntity.ok(fizzBuzzService.compute(int1, int2, limit, str1, str2));
 	}
 
