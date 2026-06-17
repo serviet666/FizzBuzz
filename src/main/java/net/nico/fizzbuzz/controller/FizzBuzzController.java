@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
-import net.nico.fizzbuzz.FizzBuzzService;
+import net.nico.fizzbuzz.service.FizzBuzzService;
 
 @Validated
 @RestController
